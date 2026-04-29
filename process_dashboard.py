@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
-import json, subprocess, statistics
+import json, statistics, requests
 from datetime import datetime
 from collections import defaultdict
 
 BASE = "https://c9f.myhelm.app/public-api"
 PICKERS = {"185": "Edna Lima", "275": "Mark Lewis", "89": "Aderoju Kosoko"}
+SESSION = requests.Session()
 
 def fetch(url, token):
-    r = subprocess.run(
-        ["curl", "-s", url, "-H", f"Authorization: Bearer {token}"],
-        capture_output=True, text=True, timeout=15
-    )
-    return json.loads(r.stdout)
+    r = SESSION.get(url, headers={"Authorization": f"Bearer {token}"}, timeout=15)
+    r.raise_for_status()
+    return r.json()
 
 def login():
-    r = subprocess.run(
-        ["curl", "-s", "-X", "POST", f"{BASE}/auth/login",
-         "-H", "Content-Type: application/json",
-         "-d", '{"email":"ross@saas-ecommerce.com","password":"Nadine32!"}'],
-        capture_output=True, text=True, timeout=15
+    r = SESSION.post(
+        f"{BASE}/auth/login",
+        json={"email": "ross@saas-ecommerce.com", "password": "Nadine32!"},
+        timeout=15
     )
-    return json.loads(r.stdout).get("token")
+    r.raise_for_status()
+    return r.json().get("token")
 
 def main():
     token = login()
