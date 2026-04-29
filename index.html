@@ -13,8 +13,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .header h1{font-size:15px;font-weight:700;letter-spacing:-.3px;}
 .header-meta{display:flex;align-items:center;gap:10px;font-size:11px;color:#94a3b8;}
 .btn{border:none;padding:6px 13px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
-.btn-refresh{background:#3b82f6;color:#fff;} .btn-refresh:hover{background:#2563eb;} .btn-refresh:disabled{background:#475569;cursor:not-allowed;}
-@keyframes spin{to{transform:rotate(360deg);}} .spin{display:inline-block;animation:spin .8s linear infinite;}
+.btn-refresh{background:#3b82f6;color:#fff;}.btn-refresh:hover{background:#2563eb;}.btn-refresh:disabled{background:#475569;cursor:not-allowed;}
+@keyframes spin{to{transform:rotate(360deg);}}.spin{display:inline-block;animation:spin .8s linear infinite;}
 .notice{background:#fffbeb;border-left:4px solid #f59e0b;padding:8px 20px;font-size:11px;color:#92400e;font-weight:500;}
 .date-bar{background:#fff;border-bottom:1px solid var(--border);padding:8px 24px;display:flex;align-items:center;gap:6px;}
 .date-bar span{font-size:11px;color:var(--muted);font-weight:600;margin-right:4px;}
@@ -23,8 +23,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .dash{padding:16px 24px;}
 .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px;}
 .kpi{background:#fff;border-radius:8px;padding:12px 14px;border-top:3px solid var(--border);box-shadow:0 1px 2px rgba(0,0,0,.05);}
-.kpi.blue{border-top-color:#3b82f6;} .kpi.green{border-top-color:#22c55e;} .kpi.purple{border-top-color:#a855f7;}
-.kpi.amber{border-top-color:#f59e0b;} .kpi.red{border-top-color:#ef4444;} .kpi.ok{border-top-color:#22c55e;}
+.kpi.blue{border-top-color:#3b82f6;}.kpi.green{border-top-color:#22c55e;}.kpi.purple{border-top-color:#a855f7;}
+.kpi.amber{border-top-color:#f59e0b;}.kpi.red{border-top-color:#ef4444;}.kpi.ok{border-top-color:#22c55e;}
 .kpi-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:4px;}
 .kpi-val{font-size:22px;font-weight:800;color:#0f172a;line-height:1;}
 .kpi-unit{font-size:11px;font-weight:500;color:var(--faint);}
@@ -40,12 +40,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .lb-table td{padding:9px 12px;border-bottom:1px solid #f8fafc;vertical-align:middle;}
 .lb-table tr:last-child td{border-bottom:none;}
 .lb-table tr:hover td{background:#f8fafc;}
-.rank{font-weight:800;font-size:16px;color:var(--faint);}
 .picker-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
 .badge{display:inline-flex;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;}
-.bg{background:#dcfce7;color:#16a34a;} .br{background:#fee2e2;color:#dc2626;} .ba{background:#fef3c7;color:#92400e;} .bx{background:#f1f5f9;color:#64748b;}
-.insight-list{display:flex;flex-direction:column;gap:8px;}
-.insight{display:flex;gap:10px;padding:10px 12px;border-radius:7px;font-size:12px;line-height:1.45;}
+.bg{background:#dcfce7;color:#16a34a;}.br{background:#fee2e2;color:#dc2626;}.ba{background:#fef3c7;color:#92400e;}.bx{background:#f1f5f9;color:#64748b;}
+/* Insights — full width, horizontal grid */
+.insights-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+.insight{display:flex;gap:10px;padding:12px 14px;border-radius:8px;font-size:12px;line-height:1.45;}
 .insight.good{background:#f0fdf4;border-left:3px solid #22c55e;}
 .insight.warn{background:#fffbeb;border-left:3px solid #f59e0b;}
 .insight.bad{background:#fef2f2;border-left:3px solid #ef4444;}
@@ -55,8 +55,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .an-table th{text-align:left;padding:6px 10px;background:#f8fafc;color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border);}
 .an-table td{padding:6px 10px;border-bottom:1px solid #f8fafc;}
 .an-table tr:last-child td{border-bottom:none;}
-.dur-r{font-weight:700;color:#ef4444;} .dur-a{font-weight:700;color:#f59e0b;} .dur-g{font-weight:600;color:var(--muted);}
+.dur-r{font-weight:700;color:#ef4444;}.dur-a{font-weight:700;color:#f59e0b;}.dur-g{font-weight:600;color:var(--muted);}
 .refreshing-bar{display:none;background:#1e40af;color:#fff;text-align:center;padding:6px;font-size:11px;font-weight:600;}
+.low-sample{font-size:10px;color:var(--faint);font-style:italic;}
 </style>
 </head>
 <body>
@@ -65,7 +66,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <h1>📦 Cloud9 Fulfilment — Picker Performance</h1>
   <div class="header-meta">
     <span id="last-updated">—</span>
-    <span id="total-picks-hdr">—</span>
+    <span id="total-waves-hdr">—</span>
     <button class="btn btn-refresh" id="btn-refresh" onclick="refreshData()"><span id="ri">↻</span> Refresh</button>
   </div>
 </div>
@@ -77,66 +78,94 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <button class="dtab" data-days="0" onclick="setDays(0)">All time</button>
 </div>
 <div class="dash">
+
+  <!-- KPI Strip -->
   <div class="kpis">
     <div class="kpi blue"><div class="kpi-lbl">Avg Nav Time</div><div class="kpi-val" id="kpi-nav">—<span class="kpi-unit">s</span></div><div class="kpi-sub" id="kpi-nav-med">—</div></div>
     <div class="kpi green"><div class="kpi-lbl">Avg Pick Time</div><div class="kpi-val" id="kpi-pick">—<span class="kpi-unit">s</span></div><div class="kpi-sub" id="kpi-pick-med">—</div></div>
     <div class="kpi purple"><div class="kpi-lbl">Scan Events</div><div class="kpi-val" id="kpi-scans">—</div><div class="kpi-sub" id="kpi-scans-sub">—</div></div>
-    <div class="kpi amber"><div class="kpi-lbl">Total Picks</div><div class="kpi-val" id="kpi-picks">—</div><div class="kpi-sub">team avg <span id="kpi-avg">—</span> min</div></div>
-    <div class="kpi" id="kpi-best-card"><div class="kpi-lbl">Fastest Picker</div><div class="kpi-val" style="font-size:14px;font-weight:800;" id="kpi-best-name">—</div><div class="kpi-sub" id="kpi-best-val">—</div></div>
+    <div class="kpi amber"><div class="kpi-lbl">Total Waves</div><div class="kpi-val" id="kpi-waves">—</div><div class="kpi-sub">avg wave <span id="kpi-avg">—</span> min</div></div>
+    <div class="kpi" id="kpi-best-card"><div class="kpi-lbl">Fastest / Order</div><div class="kpi-val" style="font-size:14px;font-weight:800;" id="kpi-best-name">—</div><div class="kpi-sub" id="kpi-best-val">—</div></div>
     <div class="kpi" id="kpi-hard-card"><div class="kpi-lbl">Hardest Client</div><div class="kpi-val" style="font-size:14px;font-weight:800;" id="kpi-hard-name">—</div><div class="kpi-sub" id="kpi-hard-val">—</div></div>
   </div>
+
+  <!-- Charts: client timing + distribution -->
   <div class="row2">
     <div class="cbox">
       <div class="ctitle">Navigation vs Pick Time by Client</div>
-      <div class="csub">Avg seconds per scan · sorted hardest first · blue = travel to bin · green = pick item</div>
+      <div class="csub">Avg seconds per scan event · sorted hardest first · blue = travel to bin · green = pick item</div>
       <div class="chart-wrap" style="height:180px"><canvas id="cClient"></canvas></div>
     </div>
     <div class="cbox">
       <div class="ctitle">Scan Duration Distribution</div>
-      <div class="csub">How long individual scan events take — nav vs pick · most should be 0–5s</div>
+      <div class="csub">How long individual scan events take · most should be in 0–5s</div>
       <div class="chart-wrap" style="height:180px"><canvas id="cDist"></canvas></div>
     </div>
   </div>
+
+  <!-- Picker leaderboard -->
   <div class="cbox cbox-full">
-    <div class="ctitle" style="margin-bottom:10px">Picker Leaderboard</div>
+    <div class="ctitle" style="margin-bottom:10px">Picker Leaderboard — ranked by mins per order</div>
     <table class="lb-table">
-      <thead><tr><th>#</th><th>Picker</th><th>Avg time/pick</th><th>vs Team avg</th><th>Picks/day avg</th><th>Today's picks</th><th>Total picks</th><th>Median time</th><th>Status</th></tr></thead>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Picker</th>
+          <th title="Primary efficiency metric — wave duration divided by number of orders in the wave">Mins / order ★</th>
+          <th>Wave duration avg</th>
+          <th>vs Team avg wave</th>
+          <th>Waves / day avg</th>
+          <th>Today's waves</th>
+          <th>Total waves</th>
+          <th>Status</th>
+        </tr>
+      </thead>
       <tbody id="lb-body"></tbody>
     </table>
+    <div style="padding:8px 12px;font-size:10px;color:var(--faint)">★ Mins per order = wave duration ÷ orders in wave. This is the true speed metric — a longer wave isn't slower if it contains more orders.</div>
   </div>
-  <div class="row2">
-    <div class="cbox">
-      <div class="ctitle">Daily Picks — <span id="chart-range-label">Last 14 days</span></div>
-      <div class="csub">Completed picks per picker · use date filter above to zoom in</div>
-      <div class="chart-wrap" style="height:190px"><canvas id="cDaily"></canvas></div>
-    </div>
-    <div class="cbox">
-      <div class="ctitle" style="margin-bottom:10px">🔍 Key Insights</div>
-      <div id="insights-list" class="insight-list"></div>
-    </div>
+
+  <!-- Daily picks chart — full width -->
+  <div class="cbox cbox-full">
+    <div class="ctitle">Daily Waves — <span id="chart-range-label">Last 14 days</span></div>
+    <div class="csub">Pick waves completed per picker per day · use date filter above to zoom in</div>
+    <div class="chart-wrap" style="height:190px"><canvas id="cDaily"></canvas></div>
   </div>
+
+  <!-- Insights — full width, 3-col grid -->
+  <div class="ctitle" style="margin-bottom:8px">🔍 Key Insights</div>
+  <div class="insights-grid" id="insights-grid"></div>
+
+  <!-- Anomaly table -->
   <div class="cbox cbox-full">
     <div class="ctitle" style="margin-bottom:2px">Scan Anomalies — Individual events &gt;30s</div>
-    <div class="csub" style="margin-bottom:10px">Unusual pauses · <span style="color:#ef4444;font-weight:600">●</span> &gt;120s critical &nbsp;<span style="color:#f59e0b;font-weight:600">●</span> 60–120s warning</div>
+    <div class="csub" style="margin-bottom:10px">Unusual pauses during picking · <span style="color:#ef4444;font-weight:600">●</span> &gt;120s critical &nbsp;<span style="color:#f59e0b;font-weight:600">●</span> 60–120s warning</div>
     <div style="overflow-y:auto;max-height:220px">
-      <table class="an-table"><thead><tr><th>Picker</th><th>Client</th><th>Type</th><th>Duration</th><th>Date &amp; Time</th></tr></thead><tbody id="atbody"></tbody></table>
+      <table class="an-table">
+        <thead><tr><th>Picker</th><th>Client</th><th>Type</th><th>Duration</th><th>Date &amp; Time</th></tr></thead>
+        <tbody id="atbody"></tbody>
+      </table>
       <div id="no-anomaly" style="display:none;padding:14px;text-align:center;color:var(--faint);font-size:12px">✅ No anomalies detected</div>
     </div>
   </div>
+
 </div>
 <script>
-const SEED={"overall_avg_mins":27.9,"user_stats":[{"id":"275","name":"Mark Lewis","total_picks":225,"avg_mins":22.9,"median_mins":10.6,"vs_avg_mins":-5.0,"faster":true},{"id":"89","name":"Aderoju Kosoko","total_picks":105,"avg_mins":23.8,"median_mins":1.3,"vs_avg_mins":-4.1,"faster":true},{"id":"185","name":"Edna Lima","total_picks":372,"avg_mins":32.0,"median_mins":16.6,"vs_avg_mins":4.2,"faster":false}],"picks_per_day":{"dates":["04-10","04-13","04-14","04-15","04-16","04-17","04-20","04-21","04-22","04-23","04-24","04-27","04-28","04-29"],"series":{"Edna Lima":[17,23,29,19,20,12,19,17,25,17,19,17,20,17],"Mark Lewis":[16,9,12,3,13,10,35,9,0,5,4,9,12,10],"Aderoju Kosoko":[3,6,2,1,2,1,11,1,0,3,4,11,5,1]}},"scan_overview":{"nav_avg":15.0,"nav_med":3.5,"pick_avg":10.6,"pick_med":4,"total_scans":187,"scan_pickers":["Edna Lima"]},"client_scan_stats":[{"client":"Filamentive","nav_avg":20,"pick_avg":30,"nav_n":18,"pick_n":14},{"client":"NACKT LIMITED","nav_avg":9.9,"pick_avg":9.4,"nav_n":29,"pick_n":27},{"client":"SlipDoctors UK","nav_avg":18.2,"pick_avg":6,"nav_n":4,"pick_n":4},{"client":"Oxyshop","nav_avg":16.8,"pick_avg":5.9,"nav_n":40,"pick_n":41},{"client":"AEQUILIVING","nav_avg":4.7,"pick_avg":1,"nav_n":3,"pick_n":3}],"scan_distribution":{"nav":{"0-5s":53,"5-15s":21,"15-30s":4,"30-60s":9,">60s":9},"pick":{"0-5s":49,"5-15s":27,"15-30s":4,"30-60s":6,">60s":5},"labels":["0-5s","5-15s","15-30s","30-60s",">60s"]},"anomalies":[{"picker":"Edna Lima","client":"NACKT LIMITED","duration":308,"type":"ITEM SCAN","date":"2026-04-29 08:16:53"},{"picker":"Edna Lima","client":"NACKT LIMITED","duration":300,"type":"LOCATION SCAN","date":"2026-04-29 08:10:04"},{"picker":"Edna Lima","client":"Oxyshop","duration":157,"type":"LOCATION SCAN","date":"2026-04-29 07:56:02"},{"picker":"Edna Lima","client":"Filamentive","duration":132,"type":"ITEM SCAN","date":"2026-04-29 14:05:01"},{"picker":"Edna Lima","client":"Filamentive","duration":112,"type":"ITEM SCAN","date":"2026-04-29 13:10:59"},{"picker":"Edna Lima","client":"Oxyshop","duration":107,"type":"LOCATION SCAN","date":"2026-04-29 07:52:52"},{"picker":"Edna Lima","client":"Filamentive","duration":89,"type":"LOCATION SCAN","date":"2026-04-29 14:07:46"},{"picker":"Edna Lima","client":"Oxyshop","duration":86,"type":"LOCATION SCAN","date":"2026-04-29 07:57:31"},{"picker":"Edna Lima","client":"Oxyshop","duration":75,"type":"LOCATION SCAN","date":"2026-04-29 13:06:03"},{"picker":"Edna Lima","client":"Filamentive","duration":74,"type":"ITEM SCAN","date":"2026-04-29 14:10:02"},{"picker":"Edna Lima","client":"NACKT LIMITED","duration":70,"type":"LOCATION SCAN","date":"2026-04-29 08:11:46"},{"picker":"Edna Lima","client":"Filamentive","duration":69,"type":"ITEM SCAN","date":"2026-04-29 14:13:20"},{"picker":"Edna Lima","client":"Oxyshop","duration":69,"type":"LOCATION SCAN","date":"2026-04-29 10:10:28"},{"picker":"Edna Lima","client":"Oxyshop","duration":66,"type":"LOCATION SCAN","date":"2026-04-29 13:04:46"},{"picker":"Edna Lima","client":"NACKT LIMITED","duration":59,"type":"ITEM SCAN","date":"2026-04-29 08:00:36"}],"total_picks":716,"last_updated":"29 Apr 2026 16:20"};
+const SEED={"overall_avg_wave_mins":27.9,"user_stats":[{"id":"185","name":"Edna Lima","total_waves":372,"avg_wave_mins":32.0,"avg_secs":1921,"median_wave_mins":16.6,"vs_avg_mins":4.2,"faster":false,"mins_per_order":3.3,"mpo_sample":25},{"id":"275","name":"Mark Lewis","total_waves":225,"avg_wave_mins":22.9,"avg_secs":1373,"median_wave_mins":10.6,"vs_avg_mins":-5.0,"faster":true,"mins_per_order":3.96,"mpo_sample":11},{"id":"89","name":"Aderoju Kosoko","total_waves":105,"avg_wave_mins":23.8,"avg_secs":1426,"median_wave_mins":1.3,"vs_avg_mins":-4.1,"faster":true,"mins_per_order":25.17,"mpo_sample":4}],"picks_per_day":{"dates":["04-10","04-13","04-14","04-15","04-16","04-17","04-20","04-21","04-22","04-23","04-24","04-27","04-28","04-29"],"series":{"Edna Lima":[17,23,29,19,20,12,19,17,25,17,19,17,20,17],"Mark Lewis":[16,9,12,3,13,10,35,9,0,5,4,9,12,10],"Aderoju Kosoko":[3,6,2,1,2,1,11,1,0,3,4,11,5,1]}},"scan_overview":{"nav_avg":15.0,"nav_med":3.5,"pick_avg":10.6,"pick_med":4,"total_scans":187,"scan_pickers":["Edna Lima"]},"client_scan_stats":[{"client":"Filamentive","nav_avg":20,"pick_avg":30,"nav_n":18,"pick_n":14},{"client":"NACKT LIMITED","nav_avg":9.9,"pick_avg":9.4,"nav_n":29,"pick_n":27},{"client":"SlipDoctors UK","nav_avg":18.2,"pick_avg":6,"nav_n":4,"pick_n":4},{"client":"Oxyshop","nav_avg":16.8,"pick_avg":5.9,"nav_n":40,"pick_n":41},{"client":"AEQUILIVING","nav_avg":4.7,"pick_avg":1,"nav_n":3,"pick_n":3}],"scan_distribution":{"nav":{"0-5s":53,"5-15s":21,"15-30s":4,"30-60s":9,">60s":9},"pick":{"0-5s":49,"5-15s":27,"15-30s":4,"30-60s":6,">60s":5},"labels":["0-5s","5-15s","15-30s","30-60s",">60s"]},"anomalies":[{"picker":"Edna Lima","client":"NACKT LIMITED","duration":308,"type":"ITEM SCAN","date":"2026-04-29 08:16:53"},{"picker":"Edna Lima","client":"NACKT LIMITED","duration":300,"type":"LOCATION SCAN","date":"2026-04-29 08:10:04"},{"picker":"Edna Lima","client":"Oxyshop","duration":157,"type":"LOCATION SCAN","date":"2026-04-29 07:56:02"},{"picker":"Edna Lima","client":"Filamentive","duration":132,"type":"ITEM SCAN","date":"2026-04-29 14:05:01"},{"picker":"Edna Lima","client":"Filamentive","duration":112,"type":"ITEM SCAN","date":"2026-04-29 13:10:59"},{"picker":"Edna Lima","client":"Oxyshop","duration":107,"type":"LOCATION SCAN","date":"2026-04-29 07:52:52"},{"picker":"Edna Lima","client":"Filamentive","duration":89,"type":"LOCATION SCAN","date":"2026-04-29 14:07:46"},{"picker":"Edna Lima","client":"Oxyshop","duration":86,"type":"LOCATION SCAN","date":"2026-04-29 07:57:31"},{"picker":"Edna Lima","client":"Oxyshop","duration":75,"type":"LOCATION SCAN","date":"2026-04-29 13:06:03"},{"picker":"Edna Lima","client":"Filamentive","duration":74,"type":"ITEM SCAN","date":"2026-04-29 14:10:02"}],"total_waves":716,"last_updated":"29 Apr 2026 17:57"};
+
 const PC={'Edna Lima':'#ef4444','Mark Lewis':'#22c55e','Aderoju Kosoko':'#3b82f6'};
-const HAS_SCAN=new Set(['Edna Lima']);
 let charts={},currentData=null,currentDays=14;
+
 function destroyCharts(){Object.values(charts).forEach(c=>c&&c.destroy());charts={};}
-function picksPerDay(name,series){const vals=series[name]||[];const active=vals.filter(v=>v>0).length;const total=vals.reduce((a,b)=>a+b,0);return active>0?Math.round(total/active):0;}
-function todayPicks(name,series){const vals=series[name]||[];return vals.length>0?vals[vals.length-1]:'—';}
-function filteredSeries(data,days){const allDates=data.picks_per_day.dates;const n=days===0?allDates.length:Math.min(days,allDates.length);const dates=allDates.slice(-n);const series={};for(const[name,vals]of Object.entries(data.picks_per_day.series)){series[name]=vals.slice(-n);}return{dates,series};}
+function wavesPerDay(name,series){const v=series[name]||[];const a=v.filter(x=>x>0).length;return a>0?Math.round(v.reduce((s,x)=>s+x,0)/a):0;}
+function todayWaves(name,series){const v=series[name]||[];return v.length?v[v.length-1]:'—';}
+function filteredSeries(data,days){const all=data.picks_per_day.dates;const n=days===0?all.length:Math.min(days,all.length);const dates=all.slice(-n);const series={};for(const[k,v]of Object.entries(data.picks_per_day.series))series[k]=v.slice(-n);return{dates,series};}
+
 function render(d){
   currentData=d;destroyCharts();
   document.getElementById('last-updated').textContent='Updated: '+d.last_updated;
-  document.getElementById('total-picks-hdr').textContent=d.total_picks+' picks';
+  document.getElementById('total-waves-hdr').textContent=(d.total_waves||d.total_picks||0)+' waves';
+
   const so=d.scan_overview||{};
   document.getElementById('kpi-nav').innerHTML=(so.nav_avg||'—')+'<span class="kpi-unit">s</span>';
   document.getElementById('kpi-nav-med').textContent=so.nav_med?'median '+so.nav_med+'s':'—';
@@ -144,54 +173,153 @@ function render(d){
   document.getElementById('kpi-pick-med').textContent=so.pick_med?'median '+so.pick_med+'s':'—';
   document.getElementById('kpi-scans').textContent=so.total_scans||'—';
   document.getElementById('kpi-scans-sub').textContent=(so.scan_pickers||[]).join(', ')||'—';
-  document.getElementById('kpi-picks').textContent=d.total_picks||'—';
-  document.getElementById('kpi-avg').textContent=d.overall_avg_mins;
-  const sorted=[...d.user_stats].sort((a,b)=>a.avg_mins-b.avg_mins);
-  if(sorted.length){const best=sorted[0];document.getElementById('kpi-best-name').textContent=best.name.split(' ')[0];document.getElementById('kpi-best-val').textContent=best.avg_mins+' min avg';document.getElementById('kpi-best-card').className='kpi green';}
+  document.getElementById('kpi-waves').textContent=d.total_waves||d.total_picks||'—';
+  document.getElementById('kpi-avg').textContent=(d.overall_avg_wave_mins||d.overall_avg_mins||'—')+' min';
+
+  // Best picker by mins_per_order (where sample >= 5)
+  const withMpo=(d.user_stats||[]).filter(u=>u.mins_per_order!=null&&u.mpo_sample>=5);
+  if(withMpo.length){
+    const best=[...withMpo].sort((a,b)=>a.mins_per_order-b.mins_per_order)[0];
+    document.getElementById('kpi-best-name').textContent=best.name.split(' ')[0];
+    document.getElementById('kpi-best-val').textContent=best.mins_per_order+' min/order';
+    document.getElementById('kpi-best-card').className='kpi green';
+  }
+
   const css=d.client_scan_stats||[];
   const hardest=[...css].sort((a,b)=>(b.nav_avg+b.pick_avg)-(a.nav_avg+a.pick_avg))[0];
-  if(hardest){document.getElementById('kpi-hard-name').textContent=hardest.client.split(' ')[0];document.getElementById('kpi-hard-val').textContent=(hardest.nav_avg+hardest.pick_avg)+'s total scan';document.getElementById('kpi-hard-card').className='kpi red';}
+  if(hardest){
+    document.getElementById('kpi-hard-name').textContent=hardest.client.split(' ')[0];
+    document.getElementById('kpi-hard-val').textContent=(hardest.nav_avg+hardest.pick_avg)+'s total scan';
+    document.getElementById('kpi-hard-card').className='kpi red';
+  }
+
+  // Client chart
   const cssSorted=[...css].sort((a,b)=>(b.nav_avg+b.pick_avg)-(a.nav_avg+a.pick_avg));
-  charts.client=new Chart(document.getElementById('cClient').getContext('2d'),{type:'bar',data:{labels:cssSorted.map(c=>c.client),datasets:[{label:'Navigation (s)',data:cssSorted.map(c=>c.nav_avg),backgroundColor:'#3b82f688',borderColor:'#3b82f6',borderWidth:2,borderRadius:3},{label:'Pick (s)',data:cssSorted.map(c=>c.pick_avg),backgroundColor:'#22c55e88',borderColor:'#22c55e',borderWidth:2,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+ctx.raw+'s',afterLabel:ctx=>{const c=cssSorted[ctx.dataIndex];return'Total: '+(c.nav_avg+c.pick_avg)+'s';} }}},scales:{y:{beginAtZero:true,grid:{color:'#f8fafc'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+  charts.client=new Chart(document.getElementById('cClient').getContext('2d'),{type:'bar',data:{labels:cssSorted.map(c=>c.client),datasets:[{label:'Navigation (s)',data:cssSorted.map(c=>c.nav_avg),backgroundColor:'#3b82f688',borderColor:'#3b82f6',borderWidth:2,borderRadius:3},{label:'Pick (s)',data:cssSorted.map(c=>c.pick_avg),backgroundColor:'#22c55e88',borderColor:'#22c55e',borderWidth:2,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+ctx.raw+'s',afterLabel:ctx=>'Total: '+(cssSorted[ctx.dataIndex].nav_avg+cssSorted[ctx.dataIndex].pick_avg)+'s'}}},scales:{y:{beginAtZero:true,grid:{color:'#f8fafc'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+
+  // Distribution chart
   const sd=d.scan_distribution||{};const dl=sd.labels||['0-5s','5-15s','15-30s','30-60s','>60s'];
   charts.dist=new Chart(document.getElementById('cDist').getContext('2d'),{type:'bar',data:{labels:dl,datasets:[{label:'Navigation',data:dl.map(l=>(sd.nav||{})[l]||0),backgroundColor:'#3b82f688',borderColor:'#3b82f6',borderWidth:1,borderRadius:3},{label:'Pick',data:dl.map(l=>(sd.pick||{})[l]||0),backgroundColor:'#22c55e88',borderColor:'#22c55e',borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+ctx.raw+' events'}}},scales:{y:{beginAtZero:true,grid:{color:'#f8fafc'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+
+  // Leaderboard — sorted by mins_per_order where available
   const lbBody=document.getElementById('lb-body');lbBody.innerHTML='';
-  const bySpeed=[...d.user_stats].sort((a,b)=>a.avg_mins-b.avg_mins);
-  bySpeed.forEach((u,i)=>{
-    const ppd=picksPerDay(u.name,d.picks_per_day.series);
-    const today=todayPicks(u.name,d.picks_per_day.series);
-    const rankIcon=i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
-    const vsBadge=u.faster?`<span class="badge bg">▲ ${Math.abs(u.vs_avg_mins)}m faster</span>`:`<span class="badge br">▼ ${Math.abs(u.vs_avg_mins)}m slower</span>`;
-    lbBody.innerHTML+=`<tr><td>${rankIcon}</td><td><span class="picker-dot" style="background:${PC[u.name]||'#94a3b8'}"></span><strong>${u.name}</strong></td><td><strong>${u.avg_mins} min</strong></td><td>${vsBadge}</td><td>${ppd} picks</td><td>${today}</td><td>${u.total_picks.toLocaleString()}</td><td>${u.median_mins} min</td><td>${u.faster?'<span class="badge bg">On target</span>':'<span class="badge br">Above avg</span>'}</td></tr>`;
+  const byMpo=[...d.user_stats].sort((a,b)=>{
+    const am=a.mins_per_order!=null&&a.mpo_sample>=5?a.mins_per_order:Infinity;
+    const bm=b.mins_per_order!=null&&b.mpo_sample>=5?b.mins_per_order:Infinity;
+    return am-bm;
   });
+  byMpo.forEach((u,i)=>{
+    const wpd=wavesPerDay(u.name,d.picks_per_day.series);
+    const today=todayWaves(u.name,d.picks_per_day.series);
+    const rank=i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
+    const hasMpo=u.mins_per_order!=null&&u.mpo_sample>=5;
+    const mpoCell=hasMpo
+      ?`<strong>${u.mins_per_order} min</strong>`
+      :`<span class="low-sample">${u.mins_per_order!=null?u.mins_per_order+' min':'—'} (low sample: ${u.mpo_sample} waves)</span>`;
+    const waveBadge=u.faster
+      ?`<span class="badge bg">▲ ${Math.abs(u.vs_avg_mins)}m faster</span>`
+      :`<span class="badge br">▼ ${Math.abs(u.vs_avg_mins)}m slower</span>`;
+    const statusBadge=hasMpo
+      ?(i===0?'<span class="badge bg">Fastest</span>':i===byMpo.length-1?'<span class="badge br">Slowest</span>':'<span class="badge bx">Mid</span>')
+      :'<span class="badge ba">Low data</span>';
+    lbBody.innerHTML+=`<tr>
+      <td>${rank}</td>
+      <td><span class="picker-dot" style="background:${PC[u.name]||'#94a3b8'}"></span><strong>${u.name}</strong></td>
+      <td>${mpoCell}</td>
+      <td>${u.avg_wave_mins||u.avg_mins} min</td>
+      <td>${waveBadge}</td>
+      <td>${wpd}</td>
+      <td>${today}</td>
+      <td>${(u.total_waves||u.total_picks||0).toLocaleString()}</td>
+      <td>${statusBadge}</td>
+    </tr>`;
+  });
+
   renderDaily(d);
   renderInsights(d);
+
+  // Anomalies
   const tbody=document.getElementById('atbody');tbody.innerHTML='';
   const anoms=d.anomalies||[];
   if(!anoms.length){document.getElementById('no-anomaly').style.display='block';}
-  else{document.getElementById('no-anomaly').style.display='none';anoms.forEach(a=>{const dc=a.duration>120?'dur-r':a.duration>60?'dur-a':'dur-g';tbody.innerHTML+=`<tr><td>${a.picker||a.user||'—'}</td><td style="color:var(--muted)">${a.client||'—'}</td><td style="color:var(--faint)">${a.type}</td><td class="${dc}">${a.duration}s</td><td style="color:var(--faint)">${a.date}</td></tr>`;});}
+  else{
+    document.getElementById('no-anomaly').style.display='none';
+    anoms.forEach(a=>{
+      const dc=a.duration>120?'dur-r':a.duration>60?'dur-a':'dur-g';
+      const picker=a.picker||a.user||'—';
+      const client=a.client||'—';
+      tbody.innerHTML+=`<tr><td>${picker}</td><td style="color:var(--muted)">${client}</td><td style="color:var(--faint)">${a.type}</td><td class="${dc}">${a.duration}s</td><td style="color:var(--faint)">${a.date}</td></tr>`;
+    });
+  }
 }
+
 function renderDaily(d){
   if(charts.daily){charts.daily.destroy();delete charts.daily;}
   const{dates,series}=filteredSeries(d,currentDays);
   document.getElementById('chart-range-label').textContent=currentDays===0?'All time':currentDays===7?'Last 7 days':'Last 14 days';
   charts.daily=new Chart(document.getElementById('cDaily').getContext('2d'),{type:'line',data:{labels:dates,datasets:Object.entries(series).map(([name,vals])=>({label:name.split(' ')[0],data:vals,borderColor:PC[name]||'#64748b',backgroundColor:(PC[name]||'#64748b')+'22',borderWidth:2,pointRadius:3,tension:0.3,fill:false}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10,padding:8}}},scales:{y:{beginAtZero:true,grid:{color:'#f8fafc'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
 }
+
 function renderInsights(d){
-  const list=document.getElementById('insights-list');list.innerHTML='';
-  const insights=[];const so=d.scan_overview||{};const css=d.client_scan_stats||[];const us=d.user_stats||[];
-  const bySpeed=[...us].sort((a,b)=>a.avg_mins-b.avg_mins);
-  if(bySpeed.length>=2){const best=bySpeed[0],worst=bySpeed[bySpeed.length-1];const gap=Math.round((worst.avg_mins-best.avg_mins)*10)/10;insights.push({type:'good',icon:'🏆',text:`<strong>${best.name}</strong> is your fastest picker at ${best.avg_mins} min avg — ${gap} min quicker than ${worst.name.split(' ')[0]}. That gap represents real cost at volume.`});}
-  const byVol=[...us].sort((a,b)=>b.total_picks-a.total_picks);
-  if(byVol.length){const top=byVol[0];const share=Math.round(top.total_picks/(d.total_picks||1)*100);insights.push({type:'info',icon:'📦',text:`<strong>${top.name}</strong> handles ${share}% of all picks (${top.total_picks.toLocaleString()} of ${(d.total_picks||0).toLocaleString()}). Optimising their speed has the biggest profit impact.`});}
-  if(css.length>=2){const byCombined=[...css].sort((a,b)=>(b.nav_avg+b.pick_avg)-(a.nav_avg+a.pick_avg));const hard=byCombined[0],easy=byCombined[byCombined.length-1];const ratio=Math.round((hard.nav_avg+hard.pick_avg)/(easy.nav_avg+easy.pick_avg)*10)/10;insights.push({type:'warn',icon:'⚠️',text:`<strong>${hard.client}</strong> scans take ${hard.nav_avg+hard.pick_avg}s — ${ratio}× longer than <strong>${easy.client}</strong> (${easy.nav_avg+easy.pick_avg}s). Review bin locations or product barcodes.`});}
-  if(so.nav_avg&&so.pick_avg){const total=so.nav_avg+so.pick_avg;const navPct=Math.round(so.nav_avg/total*100);insights.push({type:navPct>60?'warn':'info',icon:'🗺️',text:`${navPct}% of scan time is <strong>walking to bins</strong> (${so.nav_avg}s nav vs ${so.pick_avg}s pick). ${navPct>60?'High travel overhead — bin layout optimisation could significantly improve throughput.':'Good balance between travel and pick time.'}`});}
+  const grid=document.getElementById('insights-grid');grid.innerHTML='';
+  const insights=[];
+  const so=d.scan_overview||{};const css=d.client_scan_stats||[];const us=d.user_stats||[];
+
+  // 1. Mins per order leader
+  const withMpo=us.filter(u=>u.mins_per_order!=null&&u.mpo_sample>=5);
+  if(withMpo.length>=2){
+    const byMpo=[...withMpo].sort((a,b)=>a.mins_per_order-b.mins_per_order);
+    const best=byMpo[0],worst=byMpo[byMpo.length-1];
+    insights.push({type:'good',icon:'🏆',text:`<strong>${best.name}</strong> is your most efficient picker at <strong>${best.mins_per_order} min/order</strong> — vs ${worst.name.split(' ')[0]}'s ${worst.mins_per_order} min/order. Wave duration alone is misleading; ${best.name.split(' ')[0]}'s longer waves contain more orders.`});
+  } else if(withMpo.length===1){
+    const b=withMpo[0];
+    insights.push({type:'info',icon:'🏆',text:`<strong>${b.name}</strong> is your only picker with enough data for a mins/order calculation: ${b.mins_per_order} min/order. More data needed for the others.`});
+  }
+
+  // 2. Volume/profitability
+  const byVol=[...us].sort((a,b)=>(b.total_waves||b.total_picks||0)-(a.total_waves||a.total_picks||0));
+  if(byVol.length){
+    const top=byVol[0];const total=d.total_waves||d.total_picks||1;
+    const share=Math.round((top.total_waves||top.total_picks||0)/total*100);
+    insights.push({type:'info',icon:'📦',text:`<strong>${top.name}</strong> handles ${share}% of all waves (${(top.total_waves||top.total_picks||0).toLocaleString()} of ${total.toLocaleString()}). Their efficiency has the highest profit impact — a 10% improvement in their speed scales across the most volume.`});
+  }
+
+  // 3. Hardest vs easiest client
+  if(css.length>=2){
+    const sorted=[...css].sort((a,b)=>(b.nav_avg+b.pick_avg)-(a.nav_avg+a.pick_avg));
+    const hard=sorted[0],easy=sorted[sorted.length-1];
+    const ratio=((hard.nav_avg+hard.pick_avg)/(easy.nav_avg+easy.pick_avg)).toFixed(1);
+    insights.push({type:'warn',icon:'⚠️',text:`<strong>${hard.client}</strong> scans take ${hard.nav_avg+hard.pick_avg}s avg — <strong>${ratio}× longer</strong> than <strong>${easy.client}</strong> (${easy.nav_avg+easy.pick_avg}s). Consider reviewing bin placement or whether barcodes are readable first scan.`});
+  }
+
+  // 4. Navigation overhead
+  if(so.nav_avg&&so.pick_avg){
+    const navPct=Math.round(so.nav_avg/(so.nav_avg+so.pick_avg)*100);
+    insights.push({type:navPct>60?'warn':'info',icon:'🗺️',text:`<strong>${navPct}% of scan time is travel</strong> (${so.nav_avg}s nav vs ${so.pick_avg}s pick). ${navPct>60?'Pickers are spending more time walking than picking. Bin layout optimisation could meaningfully improve throughput.':'Good balance — travel and pick time are reasonably matched.'}`});
+  }
+
+  // 5. Anomaly summary
   const anoms=d.anomalies||[];
-  if(anoms.length>0){const worst=anoms[0];const critCount=anoms.filter(a=>a.duration>120).length;insights.push({type:'bad',icon:'🔴',text:`<strong>${anoms.length} scan anomalies</strong> detected, ${critCount} critical (&gt;120s). Longest: ${worst.duration}s by ${worst.picker} on ${worst.client}. Likely scanner issues, barcode problems, or distraction.`});}
-  else{insights.push({type:'good',icon:'✅',text:'No scan anomalies — all events within normal range.'});}
-  insights.forEach(ins=>{list.innerHTML+=`<div class="insight ${ins.type}"><div class="insight-icon">${ins.icon}</div><div>${ins.text}</div></div>`;});
+  if(anoms.length){
+    const worst=anoms[0];const crit=anoms.filter(a=>a.duration>120).length;
+    insights.push({type:'bad',icon:'🔴',text:`<strong>${anoms.length} scan anomalies</strong> detected — ${crit} critical (&gt;120s). Worst: <strong>${worst.duration}s</strong> by ${worst.picker||worst.user} on ${worst.client||'unknown client'}. Likely causes: scanner pairing issue, unreadable barcode, or distraction.`});
+  } else {
+    insights.push({type:'good',icon:'✅',text:'<strong>No scan anomalies</strong> — all scan events are within normal range. Every pick and location scan completed in under 30 seconds.'});
+  }
+
+  // 6. Data quality note on Aderoju
+  const aderoju=us.find(u=>u.name==='Aderoju Kosoko');
+  if(aderoju&&aderoju.mpo_sample<10){
+    insights.push({type:'info',icon:'📊',text:`<strong>Data note:</strong> Aderoju Kosoko's mins/order figure (${aderoju.mins_per_order} min) is based on only ${aderoju.mpo_sample} waves and is not yet reliable. Once more wave detail data is available this will become meaningful.`});
+  }
+
+  insights.forEach(ins=>{
+    grid.innerHTML+=`<div class="insight ${ins.type}"><div class="insight-icon">${ins.icon}</div><div>${ins.text}</div></div>`;
+  });
 }
+
 function setDays(n){currentDays=n;document.querySelectorAll('.dtab').forEach(t=>t.classList.toggle('active',parseInt(t.dataset.days)===n));if(currentData)renderDaily(currentData);}
+
 async function refreshData(){
   const btn=document.getElementById('btn-refresh'),ri=document.getElementById('ri'),bar=document.getElementById('refreshing-bar');
   btn.disabled=true;ri.className='spin';bar.style.display='block';
