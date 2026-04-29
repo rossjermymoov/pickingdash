@@ -61,11 +61,22 @@ def main():
                     "date": p["created_at"][:10],
                 }
 
+    # Order counts per wave from pick details
+    order_counts = {}
+    for pid, detail in pick_details.items():
+        invs = detail.get("pick_inventories", [])
+        if invs:
+            order_counts[pid] = len(invs)
+
     # User stats
     user_durs = defaultdict(list)
-    for pd in pick_dur.values():
+    user_order_mins = defaultdict(list)  # mins per order, where we have detail data
+    for pid, pd in pick_dur.items():
         if pd["user_id"] in PICKERS:
             user_durs[pd["user_id"]].append(pd["duration_secs"])
+            if pid in order_counts and order_counts[pid] > 0:
+                mpo = (pd["duration_secs"] / 60) / order_counts[pid]
+                user_order_mins[pd["user_id"]].append(mpo)
 
     all_durs = [d for dlist in user_durs.values() for d in dlist]
     overall_avg = statistics.mean(all_durs) if all_durs else 0
@@ -73,17 +84,20 @@ def main():
     user_stats = []
     for uid, durs in user_durs.items():
         avg = statistics.mean(durs)
+        mpo_list = user_order_mins.get(uid, [])
         user_stats.append({
             "id": uid,
             "name": PICKERS[uid],
-            "total_picks": len(durs),
-            "avg_mins": round(avg / 60, 1),
+            "total_waves": len(durs),
+            "avg_wave_mins": round(avg / 60, 1),
             "avg_secs": round(avg),
-            "median_mins": round(statistics.median(durs) / 60, 1),
+            "median_wave_mins": round(statistics.median(durs) / 60, 1),
             "vs_avg_mins": round((avg - overall_avg) / 60, 1),
             "faster": avg < overall_avg,
+            "mins_per_order": round(statistics.mean(mpo_list), 2) if mpo_list else None,
+            "mpo_sample": len(mpo_list),
         })
-    user_stats.sort(key=lambda x: x["avg_secs"])
+    user_stats.sort(key=lambda x: x["mins_per_order"] if x["mins_per_order"] is not None else x["avg_secs"] / 60)
 
     # Picks per day per user (last 14 days)
     ppd = defaultdict(lambda: defaultdict(int))
@@ -130,12 +144,12 @@ def main():
     )[:10]
 
     print(json.dumps({
-        "overall_avg_mins": round(overall_avg / 60, 1),
+        "overall_avg_wave_mins": round(overall_avg / 60, 1),
         "user_stats": user_stats,
         "picks_per_day": picks_per_day,
         "top_customers": top_customers,
         "anomalies": anomalies,
-        "total_picks": len(all_picks),
+        "total_waves": len(all_picks),
         "last_updated": datetime.now().strftime("%d %b %Y %H:%M"),
         "tt_limited": len(all_tt) < 200,
     }))
