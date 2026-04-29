@@ -159,11 +159,11 @@ async function refreshData(){
   const btn=document.getElementById('btn-refresh'),ri=document.getElementById('ri'),bar=document.getElementById('refreshing-bar');
   btn.disabled=true;ri.className='spin';bar.style.display='block';
   try{
-    const result=await window.cowork.callMcpTool('mcp__workspace__bash',{command:'cat /sessions/clever-wonderful-edison/mnt/outputs/dashboard_cache.json'});
-    let raw=Array.isArray(result)?result.map(r=>r.text||'').join(''):(result?.text||String(result));
-    const js=raw.indexOf('{'),je=raw.lastIndexOf('}');
-    if(js===-1)throw new Error('No JSON data');
-    render(JSON.parse(raw.slice(js,je+1)));
+    const resp=await fetch('/api/refresh',{method:'POST'});
+    if(!resp.ok)throw new Error('Server returned '+resp.status);
+    const data=await resp.json();
+    if(data.error)throw new Error(data.error);
+    render(data);
   }catch(e){alert('Refresh failed: '+e.message);}
   finally{btn.disabled=false;ri.className='';bar.style.display='none';}
 }
