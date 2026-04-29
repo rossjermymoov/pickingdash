@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f1f5f9; color: #1e293b; min-height: 100vh; }
+  .header { background: #1e293b; color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .header h1 { font-size: 17px; font-weight: 700; }
+  .header-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #94a3b8; }
+  .btn { border: none; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+  .btn-refresh { background: #3b82f6; color: white; }
+  .btn-refresh:hover { background: #2563eb; }
+  .btn-refresh:disabled { background: #475569; cursor: not-allowed; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { display: inline-block; animation: spin 0.8s linear infinite; }
+  .dashboard { padding: 18px 24px; }
+  .avg-banner { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #0369a1; font-weight: 600; }
+  .avg-banner span { font-size: 20px; font-weight: 800; color: #0284c7; }
+  .tt-note { font-size: 11px; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; padding: 8px 12px; border-radius: 6px; margin-bottom: 16px; }
+  .cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 18px; }
+  .card { background: white; border-radius: 10px; padding: 18px 20px; border-left: 5px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .card.green { border-left-color: #22c55e; } .card.red { border-left-color: #ef4444; }
+  .card-name { font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px; }
+  .card-stat { font-size: 30px; font-weight: 800; color: #1e293b; line-height: 1; }
+  .card-unit { font-size: 14px; font-weight: 500; color: #64748b; }
+  .card-label { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+  .badge { display: inline-flex; align-items: center; margin-top: 10px; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+  .badge-green { background: #dcfce7; color: #16a34a; } .badge-red { background: #fee2e2; color: #dc2626; }
+  .card-sub { font-size: 11px; color: #94a3b8; margin-top: 5px; }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .chart-box { background: white; border-radius: 10px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,.06); margin-bottom: 14px; }
+  .chart-title { font-size: 13px; font-weight: 700; color: #334155; }
+  .chart-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; margin-bottom: 14px; }
+  .anomaly-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .anomaly-table th { text-align: left; padding: 8px 12px; background: #f8fafc; color: #64748b; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid #e2e8f0; }
+  .anomaly-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; }
+  .anomaly-table tr:last-child td { border-bottom: none; }
+  .refreshing-bar { display: none; background: #1e40af; color: white; text-align: center; padding: 8px; font-size: 12px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="refreshing-bar" id="refreshing-bar">Fetching fresh data from Helm — this takes about 40 seconds…</div>
+<div class="header">
+  <h1>📦 Picker Performance Dashboard</h1>
+  <div class="header-meta">
+    <span id="last-updated">—</span>
+    <span id="total-picks">—</span>
+    <button class="btn btn-refresh" id="btn-refresh" onclick="refreshData()"><span id="ri">↻</span> Refresh</button>
+  </div>
+</div>
+<div class="dashboard">
+  <div id="avg-banner" class="avg-banner"></div>
+  <div id="tt-note" class="tt-note" style="display:none">⚠ Scan-level time tracking recently enabled — anomaly data currently covers Edna Lima only.</div>
+  <div class="cards" id="cards"></div>
+  <div class="charts-grid">
+    <div class="chart-box">
+      <div class="chart-title">Average pick time per picker</div>
+      <div class="chart-sub">Minutes per pick · dashed line = team average · outliers &gt;4 hrs excluded</div>
+      <canvas id="cAvg" height="220"></canvas>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Picks completed per day</div>
+      <div class="chart-sub">Last 14 working days</div>
+      <canvas id="cDaily" height="220"></canvas>
+    </div>
+  </div>
+  <div class="chart-box">
+    <div class="chart-title">Top customers by average pick time</div>
+    <div class="chart-sub">Based on most recent 40 picks · green = below team avg · red = above team avg</div>
+    <canvas id="cCust" height="180"></canvas>
+  </div>
+  <div class="chart-box" style="margin-top:14px">
+    <div class="chart-title">Scan anomalies — individual events &gt;30 seconds</div>
+    <div class="chart-sub">Scan or location events where the picker paused unusually long</div>
+    <div style="margin-top:12px">
+      <table class="anomaly-table"><thead><tr><th>Picker</th><th>Type</th><th>Duration</th><th>Date &amp; Time</th></tr></thead>
+      <tbody id="atbody"></tbody></table>
+      <div id="no-anomaly" style="display:none;padding:16px;text-align:center;color:#94a3b8;font-size:13px;">No anomalies detected ✓</div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" crossorigin="anonymous"></script>
+<script>
+const SEED = {"overall_avg_mins":27.9,"user_stats":[{"id":"275","name":"Mark Lewis","total_picks":225,"avg_mins":22.9,"avg_secs":1373,"median_mins":10.6,"vs_avg_mins":-5.0,"faster":true},{"id":"89","name":"Aderoju Kosoko","total_picks":105,"avg_mins":23.8,"avg_secs":1426,"median_mins":1.3,"vs_avg_mins":-4.1,"faster":true},{"id":"185","name":"Edna Lima","total_picks":372,"avg_mins":32.0,"avg_secs":1921,"median_mins":16.6,"vs_avg_mins":4.2,"faster":false}],"picks_per_day":{"dates":["04-10","04-13","04-14","04-15","04-16","04-17","04-20","04-21","04-22","04-23","04-24","04-27","04-28","04-29"],"series":{"Edna Lima":[17,23,29,19,20,12,19,17,25,17,19,17,20,17],"Mark Lewis":[16,9,12,3,13,10,35,9,0,5,4,9,12,10],"Aderoju Kosoko":[3,6,2,1,2,1,11,1,0,3,4,11,5,1]}},"top_customers":[{"company":"Little Bubbas","avg_mins":46.7,"picks":1},{"company":"LCM Hair Studios","avg_mins":35.9,"picks":1},{"company":"Sally's Cottages","avg_mins":34.9,"picks":1},{"company":"TransGlobal, BIL logistics","avg_mins":27.0,"picks":1},{"company":"Ultimate Modelling Products Ltd","avg_mins":26.6,"picks":1},{"company":"3DGBIRE Ltd","avg_mins":26.6,"picks":1},{"company":"Loughborough University","avg_mins":26.6,"picks":1},{"company":"Manchester Metropolitan University","avg_mins":21.9,"picks":1},{"company":"Baby and Child Ltd.","avg_mins":18.5,"picks":1},{"company":"Midlands 3D","avg_mins":17.7,"picks":1},{"company":"De Montfort University","avg_mins":17.7,"picks":1},{"company":"MEC Medical Limited","avg_mins":17.5,"picks":1}],"anomalies":[{"user":"Edna Lima","duration":308,"type":"ITEM_SCAN","date":"2026-04-29 08:16:53"},{"user":"Edna Lima","duration":300,"type":"LOCATION_SCAN","date":"2026-04-29 08:10:04"},{"user":"Edna Lima","duration":157,"type":"LOCATION_SCAN","date":"2026-04-29 07:56:02"},{"user":"Edna Lima","duration":132,"type":"ITEM_SCAN","date":"2026-04-29 14:05:01"},{"user":"Edna Lima","duration":112,"type":"ITEM_SCAN","date":"2026-04-29 13:10:59"},{"user":"Edna Lima","duration":107,"type":"LOCATION_SCAN","date":"2026-04-29 07:52:52"},{"user":"Edna Lima","duration":89,"type":"LOCATION_SCAN","date":"2026-04-29 14:07:46"},{"user":"Edna Lima","duration":86,"type":"LOCATION_SCAN","date":"2026-04-29 07:57:31"},{"user":"Edna Lima","duration":75,"type":"LOCATION_SCAN","date":"2026-04-29 13:06:03"},{"user":"Edna Lima","duration":74,"type":"ITEM_SCAN","date":"2026-04-29 14:10:02"}],"total_picks":716,"last_updated":"29 Apr 2026 16:01","tt_limited":true};
+const PC={'Edna Lima':'#ef4444','Mark Lewis':'#22c55e','Aderoju Kosoko':'#3b82f6'};
+let charts={};
+function destroyCharts(){Object.values(charts).forEach(c=>c&&c.destroy());charts={};}
+function render(d){
+  destroyCharts();
+  document.getElementById('last-updated').textContent='Updated: '+d.last_updated;
+  document.getElementById('total-picks').textContent=d.total_picks+' picks';
+  document.getElementById('avg-banner').innerHTML='Team average pick time: <span>'+d.overall_avg_mins+' min</span> &nbsp;·&nbsp; '+d.total_picks+' completed picks';
+  if(d.tt_limited)document.getElementById('tt-note').style.display='block';
+  const cards=document.getElementById('cards');cards.innerHTML='';
+  d.user_stats.forEach(u=>{
+    cards.innerHTML+=`<div class="card ${u.faster?'green':'red'}"><div class="card-name">${u.name}</div><div class="card-stat">${u.avg_mins}<span class="card-unit"> min</span></div><div class="card-label">avg pick time</div><span class="badge ${u.faster?'badge-green':'badge-red'}">${u.faster?'▲ '+Math.abs(u.vs_avg_mins)+' min faster':'▼ '+Math.abs(u.vs_avg_mins)+' min slower'} than avg</span><div class="card-sub">${u.total_picks} picks · median ${u.median_mins} min</div></div>`;
+  });
+  charts.avg=new Chart(document.getElementById('cAvg').getContext('2d'),{type:'bar',data:{labels:d.user_stats.map(u=>u.name.split(' ')[0]),datasets:[{data:d.user_stats.map(u=>u.avg_mins),backgroundColor:d.user_stats.map(u=>(PC[u.name]||'#64748b')+'cc'),borderColor:d.user_stats.map(u=>PC[u.name]||'#64748b'),borderWidth:2,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.raw+' min',afterLabel:c=>{const u=d.user_stats[c.dataIndex];return u.faster?'▲ '+Math.abs(u.vs_avg_mins)+'m below avg':'▼ '+u.vs_avg_mins+'m above avg';}}}},scales:{y:{beginAtZero:true,grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}},plugins:[{id:'avgLine',afterDraw(c){const{ctx,scales:{y,x}}=c;const yp=y.getPixelForValue(d.overall_avg_mins);ctx.save();ctx.setLineDash([5,4]);ctx.strokeStyle='#64748b';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x.left,yp);ctx.lineTo(x.right,yp);ctx.stroke();ctx.fillStyle='#64748b';ctx.font='10px system-ui';ctx.fillText('avg '+d.overall_avg_mins+'m',x.right-80,yp-4);ctx.restore();}}]});
+  charts.daily=new Chart(document.getElementById('cDaily').getContext('2d'),{type:'line',data:{labels:d.picks_per_day.dates,datasets:Object.entries(d.picks_per_day.series).map(([name,vals])=>({label:name.split(' ')[0],data:vals,borderColor:PC[name]||'#64748b',backgroundColor:(PC[name]||'#64748b')+'22',borderWidth:2,pointRadius:3,tension:0.3,fill:false}))},options:{responsive:true,plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:14}}},scales:{y:{beginAtZero:true,grid:{color:'#f1f5f9'}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+  const cColors=d.top_customers.map(c=>c.avg_mins>d.overall_avg_mins?'#ef4444cc':'#22c55ecc');
+  charts.cust=new Chart(document.getElementById('cCust').getContext('2d'),{type:'bar',data:{labels:d.top_customers.map(c=>c.company.length>30?c.company.slice(0,28)+'…':c.company),datasets:[{data:d.top_customers.map(c=>c.avg_mins),backgroundColor:cColors,borderColor:d.top_customers.map(c=>c.avg_mins>d.overall_avg_mins?'#ef4444':'#22c55e'),borderWidth:2,borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.raw+' min avg',afterLabel:c=>d.top_customers[c.dataIndex].picks+' pick(s)'}}},scales:{x:{beginAtZero:true,grid:{color:'#f1f5f9'}},y:{grid:{display:false},ticks:{font:{size:11}}}}},plugins:[{id:'custLine',afterDraw(c){const{ctx,scales:{x,y}}=c;const xp=x.getPixelForValue(d.overall_avg_mins);ctx.save();ctx.setLineDash([5,4]);ctx.strokeStyle='#64748b';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(xp,y.top);ctx.lineTo(xp,y.bottom);ctx.stroke();ctx.fillStyle='#64748b';ctx.font='10px system-ui';ctx.fillText('avg '+d.overall_avg_mins+'m',xp+4,y.top+12);ctx.restore();}}]});
+  const tbody=document.getElementById('atbody');tbody.innerHTML='';
+  if(!d.anomalies||d.anomalies.length===0){document.getElementById('no-anomaly').style.display='block';}
+  else{d.anomalies.forEach(a=>{const col=a.duration>120?'#ef4444':a.duration>60?'#f59e0b':'#64748b';tbody.innerHTML+=`<tr><td>${a.user}</td><td style="color:#64748b">${a.type.replace('_',' ')}</td><td style="font-weight:700;color:${col}">${a.duration}s</td><td style="color:#94a3b8">${a.date}</td></tr>`;});}
+}
+async function refreshData(){
+  const btn=document.getElementById('btn-refresh'),ri=document.getElementById('ri'),bar=document.getElementById('refreshing-bar');
+  btn.disabled=true;ri.className='spin';bar.style.display='block';
+  try{
+    const result=await window.cowork.callMcpTool('mcp__workspace__bash',{command:'cat /sessions/clever-wonderful-edison/mnt/outputs/dashboard_cache.json'});
+    let raw=Array.isArray(result)?result.map(r=>r.text||'').join(''):(result?.text||String(result));
+    const js=raw.indexOf('{'),je=raw.lastIndexOf('}');
+    if(js===-1)throw new Error('No data returned');
+    render(JSON.parse(raw.slice(js,je+1)));
+  }catch(e){alert('Refresh failed: '+e.message);}
+  finally{btn.disabled=false;ri.className='';bar.style.display='none';}
+}
+render(SEED);
+</script>
+</body>
+</html>
