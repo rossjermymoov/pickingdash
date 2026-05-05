@@ -67,6 +67,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="header-meta">
     <span id="last-updated">—</span>
     <span id="total-waves-hdr">—</span>
+    <span id="auto-countdown" style="color:#475569">—</span>
     <button class="btn btn-refresh" id="btn-refresh" onclick="refreshData()"><span id="ri">↻</span> Refresh</button>
   </div>
 </div>
@@ -333,6 +334,32 @@ async function refreshData(){
   finally{btn.disabled=false;ri.className='';bar.style.display='none';}
 }
 render(SEED);
+
+// Auto-refresh: poll /api/data every 15 minutes (server refreshes cache on same schedule)
+const AUTO_INTERVAL = 15 * 60 * 1000;
+let secondsUntilRefresh = AUTO_INTERVAL / 1000;
+
+function updateCountdown() {
+  const m = Math.floor(secondsUntilRefresh / 60);
+  const s = String(secondsUntilRefresh % 60).padStart(2, '0');
+  document.getElementById('auto-countdown').textContent = `auto-refresh in ${m}:${s}`;
+  secondsUntilRefresh--;
+  if (secondsUntilRefresh < 0) {
+    secondsUntilRefresh = AUTO_INTERVAL / 1000;
+    autoRefresh();
+  }
+}
+
+async function autoRefresh() {
+  try {
+    const resp = await fetch('/api/data');
+    if (!resp.ok) return;
+    const data = await resp.json();
+    if (!data.error) render(data);
+  } catch(e) { /* silent fail on auto */ }
+}
+
+setInterval(updateCountdown, 1000);
 </script>
 </body>
 </html>
