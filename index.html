@@ -71,7 +71,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="btn btn-refresh" id="btn-refresh" onclick="refreshData()"><span id="ri">↻</span> Refresh</button>
   </div>
 </div>
-<div class="notice">⚠ Scan-step timing currently available for <strong>Edna Lima</strong> only — will expand as other pickers generate scan events.</div>
+<div class="notice" id="notice-bar"></div>
 <div class="date-bar">
   <span>Show:</span>
   <button class="dtab" data-days="7" onclick="setDays(7)">Last 7 days</button>
@@ -152,10 +152,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 </div>
 <script>
-const SEED={"overall_avg_wave_mins":27.9,"user_stats":[{"id":"185","name":"Edna Lima","total_waves":372,"avg_wave_mins":32.0,"avg_secs":1921,"median_wave_mins":16.6,"vs_avg_mins":4.2,"faster":false,"mins_per_order":3.3,"mpo_sample":25},{"id":"275","name":"Mark Lewis","total_waves":225,"avg_wave_mins":22.9,"avg_secs":1373,"median_wave_mins":10.6,"vs_avg_mins":-5.0,"faster":true,"mins_per_order":3.96,"mpo_sample":11},{"id":"89","name":"Aderoju Kosoko","total_waves":105,"avg_wave_mins":23.8,"avg_secs":1426,"median_wave_mins":1.3,"vs_avg_mins":-4.1,"faster":true,"mins_per_order":25.17,"mpo_sample":4}],"picks_per_day":{"dates":["04-10","04-13","04-14","04-15","04-16","04-17","04-20","04-21","04-22","04-23","04-24","04-27","04-28","04-29"],"series":{"Edna Lima":[17,23,29,19,20,12,19,17,25,17,19,17,20,17],"Mark Lewis":[16,9,12,3,13,10,35,9,0,5,4,9,12,10],"Aderoju Kosoko":[3,6,2,1,2,1,11,1,0,3,4,11,5,1]}},"scan_overview":{"nav_avg":15.0,"nav_med":3.5,"pick_avg":10.6,"pick_med":4,"total_scans":187,"scan_pickers":["Edna Lima"]},"client_scan_stats":[{"client":"Filamentive","nav_avg":20,"pick_avg":30,"nav_n":18,"pick_n":14},{"client":"NACKT LIMITED","nav_avg":9.9,"pick_avg":9.4,"nav_n":29,"pick_n":27},{"client":"SlipDoctors UK","nav_avg":18.2,"pick_avg":6,"nav_n":4,"pick_n":4},{"client":"Oxyshop","nav_avg":16.8,"pick_avg":5.9,"nav_n":40,"pick_n":41},{"client":"AEQUILIVING","nav_avg":4.7,"pick_avg":1,"nav_n":3,"pick_n":3}],"scan_distribution":{"nav":{"0-5s":53,"5-15s":21,"15-30s":4,"30-60s":9,">60s":9},"pick":{"0-5s":49,"5-15s":27,"15-30s":4,"30-60s":6,">60s":5},"labels":["0-5s","5-15s","15-30s","30-60s",">60s"]},"anomalies":[{"picker":"Edna Lima","client":"NACKT LIMITED","duration":308,"type":"ITEM SCAN","date":"2026-04-29 08:16:53"},{"picker":"Edna Lima","client":"NACKT LIMITED","duration":300,"type":"LOCATION SCAN","date":"2026-04-29 08:10:04"},{"picker":"Edna Lima","client":"Oxyshop","duration":157,"type":"LOCATION SCAN","date":"2026-04-29 07:56:02"},{"picker":"Edna Lima","client":"Filamentive","duration":132,"type":"ITEM SCAN","date":"2026-04-29 14:05:01"},{"picker":"Edna Lima","client":"Filamentive","duration":112,"type":"ITEM SCAN","date":"2026-04-29 13:10:59"},{"picker":"Edna Lima","client":"Oxyshop","duration":107,"type":"LOCATION SCAN","date":"2026-04-29 07:52:52"},{"picker":"Edna Lima","client":"Filamentive","duration":89,"type":"LOCATION SCAN","date":"2026-04-29 14:07:46"},{"picker":"Edna Lima","client":"Oxyshop","duration":86,"type":"LOCATION SCAN","date":"2026-04-29 07:57:31"},{"picker":"Edna Lima","client":"Oxyshop","duration":75,"type":"LOCATION SCAN","date":"2026-04-29 13:06:03"},{"picker":"Edna Lima","client":"Filamentive","duration":74,"type":"ITEM SCAN","date":"2026-04-29 14:10:02"}],"total_waves":716,"last_updated":"29 Apr 2026 17:57"};
+const SEED={"overall_avg_wave_mins":27.3,"user_stats":[{"id":"89","name":"Aderoju Kosoko","total_waves":131,"avg_wave_mins":20.1,"avg_secs":1206,"median_wave_mins":9.8,"vs_avg_mins":-7.2,"faster":true,"mins_per_order":7.03,"mpo_sample":16},{"id":"275","name":"Mark Lewis","total_waves":229,"avg_wave_mins":22.5,"avg_secs":1351,"median_wave_mins":10.4,"vs_avg_mins":-4.8,"faster":true,"mins_per_order":16.68,"mpo_sample":22},{"id":"185","name":"Edna Lima","total_waves":355,"avg_wave_mins":31.5,"avg_secs":1892,"median_wave_mins":16.2,"vs_avg_mins":4.2,"faster":false,"mins_per_order":25.65,"mpo_sample":2}],"picks_per_day":{"dates":["04-14","04-15","04-16","04-17","04-20","04-21","04-22","04-23","04-24","04-27","04-28","04-29","05-02","05-05"],"series":{"Edna Lima":[29,19,20,12,19,17,25,17,19,17,20,17,18,14],"Mark Lewis":[12,3,13,10,35,9,0,5,4,9,12,10,8,6],"Aderoju Kosoko":[2,1,2,1,11,1,0,3,4,11,5,1,9,12]}},"scan_overview":{"nav_avg":14.5,"nav_med":6.0,"pick_avg":16.5,"pick_med":14.0,"total_scans":195,"scan_pickers":["Aderoju Kosoko"]},"client_scan_stats":[{"client":"SlipDoctors UK","nav_avg":18.1,"pick_avg":24.1,"nav_n":9,"pick_n":8},{"client":"Oxyshop","nav_avg":16.0,"pick_avg":13.2,"nav_n":25,"pick_n":20},{"client":"Blue Crow Media","nav_avg":10.0,"pick_avg":8.0,"nav_n":3,"pick_n":1},{"client":"Capsicolle","nav_avg":3.7,"pick_avg":11.7,"nav_n":3,"pick_n":3},{"client":"NACKT LIMITED","nav_avg":2.0,"pick_avg":13.0,"nav_n":1,"pick_n":1}],"scan_distribution":{"nav":{"0-5s":48,"5-15s":18,"15-30s":6,"30-60s":10,">60s":12},"pick":{"0-5s":40,"5-15s":22,"15-30s":8,"30-60s":7,">60s":8},"labels":["0-5s","5-15s","15-30s","30-60s",">60s"]},"anomalies":[{"picker":"Aderoju Kosoko","client":"—","duration":570,"type":"PAUSE SCAN","date":"2026-05-05 10:19:08"},{"picker":"Aderoju Kosoko","client":"—","duration":194,"type":"ITEM SCAN","date":"2026-05-05 09:56:57"}],"total_waves":715,"last_updated":"05 May 2026 14:00"};
 
 const PC={'Edna Lima':'#ef4444','Mark Lewis':'#22c55e','Aderoju Kosoko':'#3b82f6'};
-let charts={},currentData=null,currentDays=14;
+let charts={},currentData=null,currentDays=14,HAS_SCAN=new Set();
 
 function destroyCharts(){Object.values(charts).forEach(c=>c&&c.destroy());charts={};}
 function wavesPerDay(name,series){const v=series[name]||[];const a=v.filter(x=>x>0).length;return a>0?Math.round(v.reduce((s,x)=>s+x,0)/a):0;}
@@ -167,7 +167,23 @@ function render(d){
   document.getElementById('last-updated').textContent='Updated: '+d.last_updated;
   document.getElementById('total-waves-hdr').textContent=(d.total_waves||d.total_picks||0)+' waves';
 
+  // Dynamic notice bar — reflects whoever currently has scan data
   const so=d.scan_overview||{};
+  const scanPickers=so.scan_pickers||[];
+  const allPickers=(d.user_stats||[]).map(u=>u.name);
+  const missing=allPickers.filter(n=>!scanPickers.includes(n));
+  const nb=document.getElementById('notice-bar');
+  if(missing.length&&scanPickers.length){
+    nb.style.display='';
+    nb.innerHTML=`⚠ Scan-step timing available for <strong>${scanPickers.join(', ')}</strong> — no scan data yet for ${missing.join(', ')}.`;
+  } else if(!scanPickers.length){
+    nb.style.display='';nb.innerHTML='⚠ No scan-step timing data available yet.';
+  } else {
+    nb.style.display='none';
+  }
+
+  // Build HAS_SCAN from live data
+  HAS_SCAN=new Set(scanPickers);
   document.getElementById('kpi-nav').innerHTML=(so.nav_avg||'—')+'<span class="kpi-unit">s</span>';
   document.getElementById('kpi-nav-med').textContent=so.nav_med?'median '+so.nav_med+'s':'—';
   document.getElementById('kpi-pick').innerHTML=(so.pick_avg||'—')+'<span class="kpi-unit">s</span>';
